@@ -64,7 +64,7 @@ class CUtils{
 }
 
 
-$graph = new EasyRdf_Graph( 'http://localhost/hxl/hxl.rdf' );
+$graph = new EasyRdf_Graph( 'http://localhost/HXL-Vocab/Tools/hxl.rdf' );
 $graph->load();
 if ($graph) {
 	// generate information about ontology:
