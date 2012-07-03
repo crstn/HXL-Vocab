@@ -110,9 +110,6 @@ echo'<?xml version="1.0" encoding="UTF-8"?>'; ?>
   <dd><a href="<?php print $vocab; ?>"><?php print $vocab; ?></a></dd>
   <dt>Latest version:</dt>
   <dd><a href="http://hxl.humanitarianresponse.info/">http://hxl.humanitarianresponse.info/</a></dd>
-
- <dt>Previous version:</dt>
-  <dd><a href="<?php print $vocab->get("dc:replaces"); ?>"><?php print $vocab -> get("dc:replaces"); ?></a></dd>
   <dt>Revision:</dt>
   <dd><?php 
 $date = new DateTime($vocab->get('dc:date'));
@@ -388,6 +385,13 @@ print '<p align="right"><small>[click to enlarge as <a href="'.$u->getHXLFragmen
 			}
 			print '</h3>';
 			
+			// highlight hxl:TopLevelConcepts
+			if($class->get($vocab."#topLevelConcept")){
+				print '<p><strong>'.$class->label().' is a HXL top level concept.</strong></p>' ;
+			}
+			
+			
+			
 			if($class->hasProperty("rdfs:subClassOf")){	 
 				print'	  <div rel="rdfs:subClassOf" resource="'.$class->get('rdfs:subClassOf').'"></div>';
 			}
@@ -533,8 +537,6 @@ print '<p align="right"><small>[click to enlarge as <a href="'.$u->getHXLFragmen
 
 <h2 id="sec-changes">6. Change log</h2>
 
-<p>Changes compared to the <a href="<?php print $vocab->get("dc:replaces"); ?>">previous version</a> of the vocabulary:</p>
-
 <p><?php print $vocab->get('skos:changeNote'); ?></p>
 
 <?php
@@ -594,6 +596,6 @@ file_put_contents($file, $dot);
 
 ?>
 
-
+<hr />
 </body>
 </html>
