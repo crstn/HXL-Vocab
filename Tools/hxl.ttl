@@ -17,7 +17,7 @@
 #        dc:versionOf <http://hxl.humanitarianresponse.info> ;
         rdfs:seeAlso "For further information about the HXL project, see <a href='https://sites.google.com/site/hxlproject/'>https://sites.google.com/site/hxlproject/</a>."@en ;
         dc:replaces <http://hxl.humanitarianresponse.info/ns-2012-06-14/> ; 
-        skos:changeNote "<b>Changes on July 3, 2012:</b><ol><li>Versioning: We will use the URI <a href='http://hxl.humanitarianresponse.info/ns'>http://hxl.humanitarianresponse.info/ns</a> for all future versions of this vocabulary from now on. Previous versions can be found <a href='http://hxl.humanitarianresponse.info/ns-2012-06-14/'>here</a>.</li><li><a href='#Country'>hxl:Country</a> is now a subclass of <a href='http://purl.org/ontology/places#Country'>http://purl.org/ontology/places#Country</a></li><li><a href='#Thing'>hxl:Thing</a> has been introduced as an abstract base class. Every other class in HXL is a subclass of hxl:Thing. This allows us to define generic properties for all classes in HXL.</li><li>Class <em>Activity</em> has been removed.</li><li>Properties <em>containsPrimaryData</em> and <em>containsSecondaryData</em> have been removed.<li>Properties <em>displacedLocationSetTitle</em>, <em>displacedLocationTypeSetDescription</em>, <em>ageGroupSetDescription</em>, <em>ageGroupSetTitle</em>, and <em>populationDescription</em> have been removed. Use the generic title / description properties instead.</li></ol>" . # we will stick to one URI for future versions of the vocabulary; add any changes to this list!
+        skos:changeNote "<b>Changes on July 4, 2012:<ol><li>The gelolocation section now contains only those classes and properties that are specific to HXL. They extend the classes and properties (esp. topological relations) introduced by <a href='http://www.opengeospatial.org/standards/geosparql'>OGC's GeoSPARQL standard</a>.</li><li>The documentation now contains all domains and ranges inherited from super-/subclasses for each class.</li><li><a href='#validityDate'>hxl:validityDate</a> introduced.</li></ol></b><b>Changes on July 3, 2012:</b><ol><li>Versioning: We will use the URI <a href='http://hxl.humanitarianresponse.info/ns'>http://hxl.humanitarianresponse.info/ns</a> for all future versions of this vocabulary from now on. Previous versions can be found <a href='http://hxl.humanitarianresponse.info/ns-2012-06-14/'>here</a>.</li><li><a href='#Country'>hxl:Country</a> is now a subclass of <a href='http://purl.org/ontology/places#Country'>http://purl.org/ontology/places#Country</a></li><li><a href='#Thing'>hxl:Thing</a> has been introduced as an abstract base class. Every other class in HXL is a subclass of hxl:Thing. This allows us to define generic properties for all classes in HXL.</li><li>Class <em>Activity</em> has been removed.</li><li>Properties <em>containsPrimaryData</em> and <em>containsSecondaryData</em> have been removed.<li>Properties <em>displacedLocationSetTitle</em>, <em>displacedLocationTypeSetDescription</em>, <em>ageGroupSetDescription</em>, <em>ageGroupSetTitle</em>, and <em>populationDescription</em> have been removed. Use the generic title / description properties instead.</li></ol>" . # we will stick to one URI for future versions of the vocabulary; add any changes to this list!
 
 # define the different vocabulary sections for vocabulary management 
 hxl:humanitarianProfileSection a hxl:vocabularySection ;
@@ -70,7 +70,7 @@ hxl:AdminUnit
     a rdfs:Class ; 
     rdfs:isDefinedBy hxl:geolocationSection;
     skos:prefLabel "Administrative Unit"@en ;
-    rdfs:subClassOf hxl:Feature ;
+    rdfs:subClassOf geo:Feature ;
     rdfs:comment "Administrative units can include coutries, regions, cities, etc. The hierarchy of administrative units can vary from country to country."@en .        
 
 hxl:PopulatedPlace
@@ -147,7 +147,7 @@ hxl:currentLocation
     rdfs:isDefinedBy hxl:humanitarianProfileSection ;
     skos:prefLabel "current location"@en;
     rdfs:domain hxl:Population ;
-    rdfs:range hxl:Feature ;
+    rdfs:range geo:Feature ;
 rdfs:comment "The current location of the population being reported should be given at the level of geographic detail agreed by the IM Network using the Administrative Boundaries and Populated Places Common Operational Datasets. Organizations reporting Humanitarian Profile numbers should be encouraged to use the p-code system for unambiguous location reporting.<br /><small>Term origin: Humanitarian profile.</small>" .
 
 hxl:currentLocationOf owl:inverseOf hxl:currentLocation .
@@ -155,7 +155,7 @@ hxl:currentLocationOf owl:inverseOf hxl:currentLocation .
 hxl:Camp
     a rdfs:Class ; 
 	hxl:topLevelConcept "true"^^xsd:boolean;
-	rdfs:subClassOf hxl:Feature ;
+	rdfs:subClassOf geo:Feature ;
     rdfs:isDefinedBy hxl:responseSection ;
     skos:prefLabel "Camp"@en ;
     rdfs:comment "A site with temporary shelter for an affected population, such as refugees. <br /><small>Term origin: UNHCR Camp DB, Pakistan SRF, Humanitarian Profile.</small>"@en .
@@ -175,7 +175,7 @@ hxl:placeOfOrigin
     rdfs:isDefinedBy hxl:humanitarianProfileSection ;
     skos:prefLabel "place of origin"@en;
     rdfs:domain hxl:Displaced ;
-    rdfs:range hxl:Feature ;
+    rdfs:range geo:Feature ;
 rdfs:comment "This attribute only applies to Displaced and its subclasses. It should include p-coded location from which the population being reported moved as a result of the emergency.<br /><small>Term origin: Humanitarian profile.</small>" .
 
 hxl:placeOfOriginOf owl:inverseOf hxl:placeOfOrigin .
@@ -294,56 +294,6 @@ hxl:Injured
     skos:prefLabel "Injury"@en;
     owl:disjointWith hxl:Dead ;
     rdfs:comment "Indicates the Injured population.<br /><small>Term origin: ACAPS DSS, Humanitarian Profile, Shelter Cluster, HERAMS Checklist (<em>Injury</em>)</small>" .
-
-hxl:Feature
-    a rdfs:Class ; 
-	rdfs:subClassOf hxl:Thing ;
-	rdfs:isDefinedBy hxl:geolocationSection ;
-    skos:prefLabel "Feature"@en;
-    rdfs:subClassOf <http://www.w3.org/2003/01/geo/wgs84_pos#SpatialThing> ;
-rdfs:comment "Any real-word phenomenon with spatial extent, i.e. size, shape, or position. " .
-
-hxl:Geometry
-    a rdfs:Class ; 
-	rdfs:subClassOf hxl:Thing ;
-    rdfs:isDefinedBy hxl:geolocationSection ;
-    skos:prefLabel "Geometry"@en;
-rdfs:comment "Abstract root class of the geometry. This class should not be instantiated; use any of the subclasses when creating actual geometries. " .
-
-hxl:Point
-    a rdfs:Class ; 
-	rdfs:isDefinedBy hxl:geolocationSection ;
-    skos:prefLabel "Point"@en;
-    rdfs:subClassOf hxl:Geometry;
-rdfs:comment "A Point is a 0-dimensional geometric object and represents a single location in a two- or three-dimensional coordinate space." .
-
-hxl:Line
-    a rdfs:Class ; 
-	rdfs:isDefinedBy hxl:geolocationSection ;
-    skos:prefLabel "Line String"@en;
-    rdfs:subClassOf hxl:Geometry;
-rdfs:comment "A LineString is a Curve with linear interpolation between Points. Each consecutive pair of Points defines a Line segment." .
-
-hxl:Polygon
-    a rdfs:Class ; 
-	rdfs:isDefinedBy hxl:geolocationSection ;
-    skos:prefLabel "Polygon"@en;
-    rdfs:subClassOf hxl:Geometry;
-rdfs:comment "A Polygon is a planar Surface defined by 1 exterior boundary and 0 or more interior boundaries. Each interior boundary defines a hole in the Polygon." .
-
-hxl:Multipolygon
-    a rdfs:Class ; 
-	rdfs:isDefinedBy hxl:geolocationSection ;
-    skos:prefLabel "Multipolygon"@en;
-    rdfs:subClassOf hxl:Geometry;
-rdfs:comment "A Multipolygon is a planar Surface defined by 1 exterior boundary and 0 or more interior boundaries. Each interior boundary defines a hole in the Polygon." .
-
-hxl:BoundingBox
-    a rdfs:Class ; 
-	rdfs:isDefinedBy hxl:geolocationSection ;
-    skos:prefLabel "Bounding Box"@en;
-    rdfs:subClassOf hxl:Polygon;
-rdfs:comment "A BoundingBox is a Polygon defined by 1 exterior boundary and 0 interior boundaries. The exterior boundary consists of 4 points arranged as a rectangle." .
 
 hxl:Missing
     a rdfs:Class ; 
@@ -496,7 +446,7 @@ hxl:atLocation
     rdfs:subPropertyOf dc:spatial ; 
     rdfs:comment "Specififes the location for things like emergencies, projects, or camps."@en ;
     rdfs:domain hxl:Situation ; 
-rdfs:range hxl:Feature .
+rdfs:range geo:Feature .
 
 hxl:locationOf owl:inverseOf hxl:atLocation .
 
@@ -517,16 +467,6 @@ hxl:inAdminUnit
     rdfs:comment "Specifies direct containment between two administrative units. This property should only be used between administrative units that directly contain each other, i.e., when the administrative unit level of the containing unit is the level of the contained unit plus 1.";
     rdfs:domain hxl:AdminUnit;
 rdfs:range hxl:AdminUnit .
-
-hxl:hasGeometry
-    a rdf:Property, owl:ObjectProperty ;
-    rdfs:isDefinedBy hxl:geolocationSection ;
-    skos:prefLabel "has geometry"@en ;
-    rdfs:comment "Relates a feature to its geometry."@en ;
-    rdfs:domain hxl:Feature ;
-rdfs:range hxl:Geometry .
-
-hxl:isGeometryOf owl:inverseOf hxl:hasGeometry .
 
 hxl:adminUnitLevelNumber
     a rdf:Property, owl:DataProperty ;
@@ -553,79 +493,6 @@ hxl:adminUnitLevelCountry
 rdfs:range hxl:Country .
 
 hxl:adminUnitLevelCountryOf owl:inverseOf hxl:adminUnitLevel .
-
-hxl:asWKT
-    a rdf:Property, owl:DataProperty ;
-    rdfs:isDefinedBy hxl:geolocationSection ;
-    skos:prefLabel "as WKT"@en ;
-    rdfs:comment "A geometry serialised as WKT. Note that the WKT serialisation contains the spatial reference system (SRS), as specified in the <a href='http://portal.opengeospatial.org/files/?artifact_id=25355'>OGC Simple Feature standard</a>. If no SRS is given, HXL uses WGS 84 as the standard SRS."@en ;
-    rdfs:domain hxl:Geometry ;
-rdfs:range rdfs:Literal .
-
-hxl:equals
-    a rdf:Property, owl:ObjectProperty, owl:SymmetricProperty ;
-    rdfs:isDefinedBy hxl:geolocationSection ;
-    skos:prefLabel "equals"@en ;
-    rdfs:comment "Topological relation. States that two geometries are equal."@en ;
-    rdfs:domain hxl:Geometry ;
-rdfs:range hxl:Geometry .
-
-hxl:intersects
-    a rdf:Property, owl:ObjectProperty ;
-    rdfs:isDefinedBy hxl:geolocationSection ;
-    skos:prefLabel "intersects"@en ;
-    rdfs:comment "Topological relation. States that one geometry intersects another one. "@en ;
-    rdfs:domain hxl:Geometry ;
-rdfs:range hxl:Geometry .
-
-hxl:touches
-    a rdf:Property, owl:ObjectProperty, owl:SymmetricProperty ;
-    rdfs:isDefinedBy hxl:geolocationSection ;
-    skos:prefLabel "touches"@en ;
-    rdfs:comment "Topological relation. States that one geometry touches another one. "@en ;
-    rdfs:domain hxl:Geometry ;
-rdfs:range hxl:Geometry .
-
-
-hxl:crosses
-    a rdf:Property, owl:ObjectProperty, owl:TransitiveProperty ;
-    rdfs:isDefinedBy hxl:geolocationSection ;
-    skos:prefLabel "crosses"@en ;
-    rdfs:comment "Topological relation. States that one geometry crosses another one. "@en ;
-    rdfs:domain hxl:Geometry ;
-rdfs:range hxl:Geometry .
-
-hxl:within
-    a rdf:Property, owl:ObjectProperty, owl:TransitiveProperty ;
-    rdfs:isDefinedBy hxl:geolocationSection ;
-    skos:prefLabel "within"@en ;
-    rdfs:comment "Topological relation. States that one geometry is within another one. "@en ;
-    rdfs:domain hxl:Geometry ;
-rdfs:range hxl:Geometry .
-
-hxl:contains
-    a rdf:Property, owl:ObjectProperty, owl:TransitiveProperty ;
-    rdfs:isDefinedBy hxl:geolocationSection ;
-    skos:prefLabel "contains"@en ;
-    rdfs:comment "Topological relation. States that one geometry contains another one. "@en ;
-    rdfs:domain hxl:Geometry ;
-rdfs:range hxl:Geometry .
-
-hxl:overlaps
-    a rdf:Property, owl:ObjectProperty, owl:TransitiveProperty ;
-    rdfs:isDefinedBy hxl:geolocationSection ;
-    skos:prefLabel "overlaps"@en ;
-    rdfs:comment "Topological relation. States that one geometry overlaps another one. "@en ;
-    rdfs:domain hxl:Geometry ;
-rdfs:range hxl:Geometry .
-
-hxl:near
-    a rdf:Property, owl:ObjectProperty, owl:SymmetricProperty ;
-    rdfs:isDefinedBy hxl:geolocationSection ;
-    skos:prefLabel "near"@en ;
-    rdfs:comment "Topological relation. States that one geometry is near another one. "@en ;
-    rdfs:domain hxl:Geometry ;
-rdfs:range hxl:Geometry .
 
 hxl:start        
     a rdf:Property , owl:DataProperty ;
@@ -691,12 +558,22 @@ hxl:duration
 rdfs:range rdfs:Literal .
 
 
-dc:date
+hxl:date
         a rdf:Property , owl:DataProperty ;
         rdfs:isDefinedBy hxl:datetimeSection ;
-        skos:prefLabel "dc:date"@en ;
+        skos:prefLabel "date"@en ;
+		rdfs:subPropertyOf dc:date ;
         rdfs:comment "Generic property for date/time stamps at arbitrary granularity." ;
-# rdfs:domain hxl:OutcomeToDate, hxl:OutputToDate ;
+		rdfs:domain hxl:Thing ;
+rdfs:range rdfs:Literal .
+
+hxl:validityDate
+        a rdf:Property , owl:DataProperty ;
+        rdfs:isDefinedBy hxl:datetimeSection ;
+        skos:prefLabel "date"@en ;
+		rdfs:subPropertyOf hxl:date ;
+        rdfs:comment "Property to express when a certain piece of data, such as a person count, was valid. Note that this may differ from the time when the data was <em>reported</em>; use <a href='#date'>hxl:date</a> for these." ;
+		rdfs:domain hxl:Thing ;
 rdfs:range rdfs:Literal .
 
 hxl:hasGLIDEnumber
@@ -791,12 +668,12 @@ foaf:Group
     skos:prefLabel "foaf:Group" ;
 rdfs:subClassOf foaf:Agent .
 
-hxl:featureName         #should this be a more generic property "name"?  Same question for featureAltName and featureRefName.
+hxl:featureName   
         a rdf:Property , owl:DataProperty ;        
         rdfs:isDefinedBy hxl:geolocationSection ;
         skos:prefLabel "feature name"@en ;
         rdfs:comment "The common name of the feature.  This is the accepted spelling of the name for the humanitarian community at the time of this version of the dataset."@en ;
-        rdfs:domain hxl:Feature ;
+        rdfs:domain geo:Feature ;
 rdfs:range rdfs:Literal .
 
 hxl:featureAltName
@@ -804,7 +681,7 @@ hxl:featureAltName
         rdfs:isDefinedBy hxl:geolocationSection ;
         skos:prefLabel "feature alternate name"@en ;
         rdfs:comment "An alternative spelling of the feature.  This is not the accepted spelling of the name for the humanitarian community and should be avoided."@en ;
-        rdfs:domain hxl:Feature ;
+        rdfs:domain geo:Feature ;
 rdfs:range rdfs:Literal .
 
 hxl:featureRefName
@@ -812,7 +689,7 @@ hxl:featureRefName
         rdfs:isDefinedBy hxl:geolocationSection ;
         skos:prefLabel "feature reference name"@en ;
         rdfs:comment "A version of the feature name in proper case without accented characters or apostrophes.  Spaces and hyphens are allowed."@en ;
-        rdfs:domain hxl:Feature ;
+        rdfs:domain geo:Feature ;
 rdfs:range rdfs:Literal .
 
 hxl:version

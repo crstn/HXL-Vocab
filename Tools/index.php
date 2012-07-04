@@ -195,10 +195,8 @@ echo'<?xml version="1.0" encoding="UTF-8"?>'; ?>
 <hr />
 
 <dl>
-  <dt>This version:</dt>
+  <dt>Namespace URI for the HXL Vocabulary:</dt>
   <dd><a href="<?php print $vocab; ?>"><?php print $vocab; ?></a></dd>
-  <dt>Latest version:</dt>
-  <dd><a href="http://hxl.humanitarianresponse.info/">http://hxl.humanitarianresponse.info/</a></dd>
   <dt>Revision:</dt>
   <dd><?php 
 $date = new DateTime($vocab->get('dc:date'));
