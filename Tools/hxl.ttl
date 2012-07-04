@@ -1,11 +1,12 @@
-@prefix rdf:        <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
-@prefix rdfs:         <http://www.w3.org/2000/01/rdf-schema#> .
-@prefix owl:         <http://www.w3.org/2002/07/owl#> .
-@prefix foaf:         <http://xmlns.com/foaf/0.1/> .
-@prefix dc:         <http://purl.org/dc/terms/> .
-@prefix xsd:         <http://www.w3.org/2001/XMLSchema#> .
-@prefix skos:         <http://www.w3.org/2004/02/skos/core#> .
-@prefix hxl:         <http://hxl.humanitarianresponse.info/ns/#> . 
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl:  <http://www.w3.org/2002/07/owl#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix dc:   <http://purl.org/dc/terms/> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix hxl:  <http://hxl.humanitarianresponse.info/ns/#> . 
+@prefix geo:  <http://www.opengis.net/geosparql#> .
 
 <http://hxl.humanitarianresponse.info/ns/> a owl:Ontology ;  
         dc:date "2012-07-04"^^xsd:date ; # update
@@ -16,7 +17,7 @@
 #        dc:versionOf <http://hxl.humanitarianresponse.info> ;
         rdfs:seeAlso "For further information about the HXL project, see <a href='https://sites.google.com/site/hxlproject/'>https://sites.google.com/site/hxlproject/</a>."@en ;
         dc:replaces <http://hxl.humanitarianresponse.info/ns-2012-06-14/> ; 
-        skos:changeNote "<b>Changes on July 3, 2012:</b><ol><li>Versioning: We will use the URI <a href='http://hxl.humanitarianresponse.info/ns'>http://hxl.humanitarianresponse.info/ns</a> for all future versions of this vocabulary from now on. Previous versions can be found <a href='http://hxl.humanitarianresponse.info/ns-2012-06-14/'>here</a>.</li><li><a href='#Country'>hxl:Country</a> is now a subclass of <a href='http://purl.org/ontology/places#Country'>http://purl.org/ontology/places#Country</a></li><li><a href='#Thing'>hxl:Thing</a> has been introduced as an abstract base class. Every other class in HXL is a subclass of hxl:Thing. This allows us to define generic properties for all classes in HXL.</li><li>Class <em>Activity</em> has been removed.</li><li>Properties <em>containsPrimaryData</em> and <em>containsSecondaryData</em> have been removed.<li>Properties <em>displacedLocationSetTitle</em>, <em>displacedLocationTypeSetDescription</em>, <em>ageGroupSetDescription</em>, and <em>ageGroupSetTitle</em> have been removed. Use the generic title / description properties instead.</li></ol>" . # we will stick to one URI for future versions of the vocabulary; add any changes to this list!
+        skos:changeNote "<b>Changes on July 3, 2012:</b><ol><li>Versioning: We will use the URI <a href='http://hxl.humanitarianresponse.info/ns'>http://hxl.humanitarianresponse.info/ns</a> for all future versions of this vocabulary from now on. Previous versions can be found <a href='http://hxl.humanitarianresponse.info/ns-2012-06-14/'>here</a>.</li><li><a href='#Country'>hxl:Country</a> is now a subclass of <a href='http://purl.org/ontology/places#Country'>http://purl.org/ontology/places#Country</a></li><li><a href='#Thing'>hxl:Thing</a> has been introduced as an abstract base class. Every other class in HXL is a subclass of hxl:Thing. This allows us to define generic properties for all classes in HXL.</li><li>Class <em>Activity</em> has been removed.</li><li>Properties <em>containsPrimaryData</em> and <em>containsSecondaryData</em> have been removed.<li>Properties <em>displacedLocationSetTitle</em>, <em>displacedLocationTypeSetDescription</em>, <em>ageGroupSetDescription</em>, <em>ageGroupSetTitle</em>, and <em>populationDescription</em> have been removed. Use the generic title / description properties instead.</li></ol>" . # we will stick to one URI for future versions of the vocabulary; add any changes to this list!
 
 # define the different vocabulary sections for vocabulary management 
 hxl:humanitarianProfileSection a hxl:vocabularySection ;
@@ -127,8 +128,8 @@ hxl:Casualty
 hxl:Dead
 	a rdfs:Class ; 
     rdfs:isDefinedBy hxl:humanitarianProfileSection ;
-    skos:prefLabel "Dead"@en ;
-    skos:altLabel "Death"@en ;
+    skos:prefLabel "Death"@en ;
+    skos:altLabel "Dead"@en ;
     rdfs:subClassOf hxl:Casualty ;
     owl:disjointWith hxl:Injured ;
     rdfs:comment "A (reported) death.<br /><small>Term origin: ACAPS DSS, HPM Ethiopia, Shelter Cluster, Humanitarian Profile (<em>Dead</em>).</small>" .
@@ -290,7 +291,7 @@ hxl:Injured
     a rdfs:Class ; 
 	rdfs:isDefinedBy hxl:humanitarianProfileSection  ;
     rdfs:subClassOf hxl:Casualty ;
-    skos:prefLabel "Injured Population"@en;
+    skos:prefLabel "Injury"@en;
     owl:disjointWith hxl:Dead ;
     rdfs:comment "Indicates the Injured population.<br /><small>Term origin: ACAPS DSS, Humanitarian Profile, Shelter Cluster, HERAMS Checklist (<em>Injury</em>)</small>" .
 
@@ -729,14 +730,6 @@ hxl:householdCount
         skos:prefLabel "household count"@en ;
         rdfs:subPropertyOf hxl:count ;
         rdfs:comment "The number of people in a population. The range is intentionally not restricted to numeric values, so that rough numbers or estimates are supported."@en ;
-        rdfs:domain hxl:Population ;
-rdfs:range rdfs:Literal .
-
-hxl:populationDescription
-        a rdf:Property, owl:DataProperty ;
-        rdfs:isDefinedBy hxl:humanitarianProfileSection ;
-        skos:prefLabel "population description"@en ;
-        rdfs:comment "A description of this population."@en ;
         rdfs:domain hxl:Population ;
 rdfs:range rdfs:Literal .
 

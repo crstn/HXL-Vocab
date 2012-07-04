@@ -3,6 +3,7 @@ require_once "EasyRdf.php";
 require_once "html_tag_helpers.php";
 
 
+// some utilities
 class CUtils{
 	
 	private $_vocab = null;
@@ -26,7 +27,7 @@ class CUtils{
 		
 	}
 
-// return the fragement if the resource is part of this vocab; if not, return the whole URI
+	// return the fragement if the resource is part of this vocab; if not, return the whole URI
 	public function getHXLFragment(EasyRdf_Resource $resource){
 		if(strpos($resource, $this->_vocab) === 0){
 			return $this->getFragment($resource);
@@ -42,14 +43,19 @@ class CUtils{
 	public function makeLink(EasyRdf_Resource $res){
 			$resource = $res->__toString();
 			
-			if(strpos($resource, $this->_vocab) === 0){ // internal
-				return '<a href="#'.$this->getFragment($res).'">'.$res->label().'</a>';
-			}else{ // external
-				return '<a href="'.$resource.'">'.$resource.'</a>';
+			if($this->getFragment($res) == "Thing"){
+				return 'HXL base class';
+			}else{
+				if(strpos($resource, $this->_vocab) === 0){ // internal
+					return '<a href="#'.$this->getFragment($res).'">'.$res->label().'</a>';
+				}else{ // external
+					return '<a href="'.$resource.'">'.$resource.'</a>';
+				}
 			}
+			
 	}
 
-// generates an html link with the resource ID as text, depending on whether it is internal to the vocab, or external
+	// generates an html link with the resource ID as text, depending on whether it is internal to the vocab, or external
 	public function makeIDLink(EasyRdf_Resource $res){
 			$resource = $res->__toString();
 			
@@ -59,8 +65,91 @@ class CUtils{
 				return '<a href="'.$resource.'">'.$resource.'</a>';
 			}
 	}
-
 	
+	// gets the properties where $class (or any of its superclasses) is rdfs:domain
+	public function getDomains($graph, $class){
+		$domainURIs = $graph->resourcesMatching('rdfs:domain', $class);
+
+		$domains = array();
+		foreach($domainURIs as $domainURI){
+			$domains[] = $this->makeLink($domainURI);			
+		}
+
+		// document inherited domains from superclasses
+		$domains = $this->getInheritedDomains($graph, $class, $domains); 
+		
+		if(count($domains) > 0){
+			$domains = array_unique($domains); // remove duplicates
+			sort($domains);
+			print'	 <tr><th>Domain of:</th><td>';
+			foreach($domains as $domain){
+				print $domain.' | ';							
+			}			
+			print'</td>';
+		}
+	}
+	
+	
+	// iterates through the transitive closure of the class hierarchy and prints all 
+	// properties where a superclass of $res is the domain
+	public function getInheritedDomains(EasyRdf_Graph $graph, EasyRdf_Resource $res, Array $domains){
+		
+			$superclasses = $res->all("rdfs:subClassOf");
+
+			foreach($superclasses as $super){
+				$domainURIs = $graph->resourcesMatching('rdfs:domain', $super);
+				foreach($domainURIs as $domainURI){
+					$domains[] = '<span class="inherited">'.$this->makeLink($domainURI).' <small>(via '.$this->makeLink($super).')</small></span>';
+				}
+				return $this->getInheritedDomains($graph, $super, $domains); //recursion
+			}
+		 	
+			// end of recursion
+			return $domains;		
+	}
+	
+	
+	// gets the properties where $class (or any of its subclasses) is rdfs:range
+	public function getRanges($graph, $class){
+		$rangeURIs = $graph->resourcesMatching('rdfs:range', $class);
+
+		$ranges = array();
+		foreach($rangeURIs as $rangeURI){
+			$ranges[] = $this->makeLink($rangeURI);			
+		}
+
+		// document inherited ranges from subclasses
+		$ranges = $this->getInheritedRanges($graph, $class, $ranges); 
+		
+		if(count($ranges) > 0){
+			$ranges = array_unique($ranges); // remove duplicates
+			sort($ranges);
+			print'	 <tr><th>Range of:</th><td>';
+			foreach($ranges as $range){
+				print $range.' | ';							
+			}			
+			print'</td>';
+		}
+	}
+	
+	
+	
+	// iterates through the transitive closure of the class hierarchy and prints all 
+	// properties where a subclass of $res is the range
+	public function getInheritedRanges(EasyRdf_Graph $graph, EasyRdf_Resource $res, Array $ranges){		
+			$subclasses = $graph->resourcesMatching('rdfs:subClassOf', $res);
+
+			foreach($subclasses as $sub){
+				$rangeURIs = $graph->resourcesMatching('rdfs:range', $sub);
+				foreach($rangeURIs as $rangeURI){
+					$ranges[] = '<span class="inherited">'.$this->makeLink($rangeURI).' <small>(via '.$this->makeLink($sub).')</small></span>';
+				}
+				return $this->getInheritedRanges($graph, $sub, $ranges); //recursion
+			}
+			
+			// end of recursion
+			return $ranges;
+	}					
 }
 
 
@@ -401,14 +490,12 @@ print '<p align="right"><small>[click to enlarge as <a href="'.$u->getHXLFragmen
 			print'  <table>
 			    <tbody>
 			      <tr><th>Identifier:</th><td>'.$u->makeIDLink($class).'</td></tr>';
-			if($class->hasProperty("rdfs:subClassOf")){	 
+			if($class->hasProperty("rdfs:subClassOf") && $u->getFragment($class->get('rdfs:subClassOf')) != "Thing"){	 
 				print'	 <tr><th>Subclass of:</th><td>'.$u->makeLink($class->get('rdfs:subClassOf')).'</td></tr>';
 			}
 			
 			// find all subclasses, and properties where this resource is domain or range:
 			$subclasses = $graph->resourcesMatching('rdfs:subClassOf', $class);
-			$domains = $graph->resourcesMatching('rdfs:domain', $class);
-			$ranges = $graph->resourcesMatching('rdfs:range', $class);
 			
 				if(count($subclasses) > 0){
 					sort($subclasses);
@@ -419,26 +506,9 @@ print '<p align="right"><small>[click to enlarge as <a href="'.$u->getHXLFragmen
 					}
 					print'</td>';
 				}
-			
-				if(count($domains) > 0){
-					sort($domains);
-					print'	 <tr><th>Domain of:</th><td>';
-			
-					foreach($domains as $domain){
-						print $u->makeLink($domain).' | ';
-					}
-					print'</td>';
-				}
-			
-				if(count($ranges) > 0){
-					sort($ranges);
-					print'	 <tr><th>Range of:</th><td>';
-			
-					foreach($ranges as $range){
-						print $u->makeLink($range).' | ';
-					}
-					print'</td>';
-				}
+				
+				$u->getDomains($graph, $class);	
+				$u->getRanges($graph, $class);	
 			
 				print '	      </tbody>
 			    	</table>
@@ -599,3 +669,13 @@ file_put_contents($file, $dot);
 <hr />
 </body>
 </html>
+
+<?php
+// supports logging of var_dump to error_log; use like this:
+// ob_start("var_log");
+// var_dump($variable);
+// ob_end_flush();
+function var_log($buffer) {
+  error_log ($buffer);
+}
+?>

@@ -31,7 +31,7 @@
     <dc:replaces rdf:resource="http://hxl.humanitarianresponse.info/ns-2012-06-14/"/>
   </rdf:Description>
   <rdf:Description rdf:about="http://hxl.humanitarianresponse.info/ns/">
-    <skos:changeNote>&lt;b&gt;Changes on July 3, 2012:&lt;/b&gt;&lt;ol&gt;&lt;li&gt;Versioning: We will use the URI &lt;a href='http://hxl.humanitarianresponse.info/ns'&gt;http://hxl.humanitarianresponse.info/ns&lt;/a&gt; for all future versions of this vocabulary from now on. Previous versions can be found &lt;a href='http://hxl.humanitarianresponse.info/ns-2012-06-14/'&gt;here&lt;/a&gt;.&lt;/li&gt;&lt;li&gt;&lt;a href='#Country'&gt;hxl:Country&lt;/a&gt; is now a subclass of &lt;a href='http://purl.org/ontology/places#Country'&gt;http://purl.org/ontology/places#Country&lt;/a&gt;&lt;/li&gt;&lt;li&gt;&lt;a href='#Thing'&gt;hxl:Thing&lt;/a&gt; has been introduced as an abstract base class. Every other class in HXL is a subclass of hxl:Thing. This allows us to define generic properties for all classes in HXL.&lt;/li&gt;&lt;li&gt;Class &lt;em&gt;Activity&lt;/em&gt; has been removed.&lt;/li&gt;&lt;li&gt;Properties &lt;em&gt;containsPrimaryData&lt;/em&gt; and &lt;em&gt;containsSecondaryData&lt;/em&gt; have been removed.&lt;li&gt;Properties &lt;em&gt;displacedLocationSetTitle&lt;/em&gt;, &lt;em&gt;displacedLocationTypeSetDescription&lt;/em&gt;, &lt;em&gt;ageGroupSetDescription&lt;/em&gt;, and &lt;em&gt;ageGroupSetTitle&lt;/em&gt; have been removed. Use the generic title / description properties instead.&lt;/li&gt;&lt;/ol&gt;</skos:changeNote>
+    <skos:changeNote>&lt;b&gt;Changes on July 3, 2012:&lt;/b&gt;&lt;ol&gt;&lt;li&gt;Versioning: We will use the URI &lt;a href='http://hxl.humanitarianresponse.info/ns'&gt;http://hxl.humanitarianresponse.info/ns&lt;/a&gt; for all future versions of this vocabulary from now on. Previous versions can be found &lt;a href='http://hxl.humanitarianresponse.info/ns-2012-06-14/'&gt;here&lt;/a&gt;.&lt;/li&gt;&lt;li&gt;&lt;a href='#Country'&gt;hxl:Country&lt;/a&gt; is now a subclass of &lt;a href='http://purl.org/ontology/places#Country'&gt;http://purl.org/ontology/places#Country&lt;/a&gt;&lt;/li&gt;&lt;li&gt;&lt;a href='#Thing'&gt;hxl:Thing&lt;/a&gt; has been introduced as an abstract base class. Every other class in HXL is a subclass of hxl:Thing. This allows us to define generic properties for all classes in HXL.&lt;/li&gt;&lt;li&gt;Class &lt;em&gt;Activity&lt;/em&gt; has been removed.&lt;/li&gt;&lt;li&gt;Properties &lt;em&gt;containsPrimaryData&lt;/em&gt; and &lt;em&gt;containsSecondaryData&lt;/em&gt; have been removed.&lt;li&gt;Properties &lt;em&gt;displacedLocationSetTitle&lt;/em&gt;, &lt;em&gt;displacedLocationTypeSetDescription&lt;/em&gt;, &lt;em&gt;ageGroupSetDescription&lt;/em&gt;, &lt;em&gt;ageGroupSetTitle&lt;/em&gt;, and &lt;em&gt;populationDescription&lt;/em&gt; have been removed. Use the generic title / description properties instead.&lt;/li&gt;&lt;/ol&gt;</skos:changeNote>
   </rdf:Description>
   <rdf:Description rdf:about="http://hxl.humanitarianresponse.info/ns/#humanitarianProfileSection">
     <rdf:type rdf:resource="http://hxl.humanitarianresponse.info/ns/#vocabularySection"/>
@@ -265,10 +265,10 @@
     <rdfs:isDefinedBy rdf:resource="http://hxl.humanitarianresponse.info/ns/#humanitarianProfileSection"/>
   </rdf:Description>
   <rdf:Description rdf:about="http://hxl.humanitarianresponse.info/ns/#Dead">
-    <skos:prefLabel xml:lang="en">Dead</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">Death</skos:prefLabel>
   </rdf:Description>
   <rdf:Description rdf:about="http://hxl.humanitarianresponse.info/ns/#Dead">
-    <skos:altLabel xml:lang="en">Death</skos:altLabel>
+    <skos:altLabel xml:lang="en">Dead</skos:altLabel>
   </rdf:Description>
   <rdf:Description rdf:about="http://hxl.humanitarianresponse.info/ns/#Dead">
     <rdfs:subClassOf rdf:resource="http://hxl.humanitarianresponse.info/ns/#Casualty"/>
@@ -652,7 +652,7 @@
     <rdfs:subClassOf rdf:resource="http://hxl.humanitarianresponse.info/ns/#Casualty"/>
   </rdf:Description>
   <rdf:Description rdf:about="http://hxl.humanitarianresponse.info/ns/#Injured">
-    <skos:prefLabel xml:lang="en">Injured Population</skos:prefLabel>
+    <skos:prefLabel xml:lang="en">Injury</skos:prefLabel>
   </rdf:Description>
   <rdf:Description rdf:about="http://hxl.humanitarianresponse.info/ns/#Injured">
     <owl:disjointWith rdf:resource="http://hxl.humanitarianresponse.info/ns/#Dead"/>
@@ -1660,27 +1660,6 @@
     <rdfs:domain rdf:resource="http://hxl.humanitarianresponse.info/ns/#Population"/>
   </rdf:Description>
   <rdf:Description rdf:about="http://hxl.humanitarianresponse.info/ns/#householdCount">
-    <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://hxl.humanitarianresponse.info/ns/#populationDescription">
-    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://hxl.humanitarianresponse.info/ns/#populationDescription">
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DataProperty"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://hxl.humanitarianresponse.info/ns/#populationDescription">
-    <rdfs:isDefinedBy rdf:resource="http://hxl.humanitarianresponse.info/ns/#humanitarianProfileSection"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://hxl.humanitarianresponse.info/ns/#populationDescription">
-    <skos:prefLabel xml:lang="en">population description</skos:prefLabel>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://hxl.humanitarianresponse.info/ns/#populationDescription">
-    <rdfs:comment xml:lang="en">A description of this population.</rdfs:comment>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://hxl.humanitarianresponse.info/ns/#populationDescription">
-    <rdfs:domain rdf:resource="http://hxl.humanitarianresponse.info/ns/#Population"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://hxl.humanitarianresponse.info/ns/#populationDescription">
     <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
   </rdf:Description>
   <rdf:Description rdf:about="http://hxl.humanitarianresponse.info/ns/#source">
